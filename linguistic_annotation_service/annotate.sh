@@ -45,4 +45,4 @@ python src/utilities/write_feature_statistics.py "$@"
 
 echo "\033[32mDone with annotation./results\033[m"
 echo "\033[32mAll annotated articles can be found at: /annotated\033[m"
-echo "\033[32mStatistics of all features can be found at: /results\033[m"
+echo "\033[32mAll feature statistics and matched items can be found at: /results\033[m"

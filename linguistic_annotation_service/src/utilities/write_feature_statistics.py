@@ -64,6 +64,10 @@ for r, d, f in os.walk(inputRoot):
             all_feature_match[k].append(v)
 
 df_stats = pd.concat([df_original, pd.DataFrame(all_feature_stats)], axis=1)
-df_match = pd.concat([df_original, pd.DataFrame(all_feature_match)], axis=1)
+
+df_match = pd.DataFrame(all_feature_match)
+df_match.drop(["question", "exclamation", "arousal", "valence"], axis=1, inplace=True)
+df_match = pd.concat([df_original, df_match], axis=1)
 
 df_stats.to_csv(os.path.join(output_root, "feature_statistics_" + datetime.datetime.today().strftime('%Y-%m-%d') + ".tsv"), sep="\t", encoding="utf-8", index=False)
+df_match.to_pickle(os.path.join(output_root, "matched_items_" + datetime.datetime.today().strftime('%Y-%m-%d') + ".pkl"))

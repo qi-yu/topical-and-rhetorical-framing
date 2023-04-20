@@ -1,6 +1,6 @@
 # Topical and Rhetorical Framing Strategies in German Newspapers 
 
-## About
+## 1. About
 
 This repository contains the source code of the paper to appear in:
 
@@ -21,7 +21,7 @@ Such devices include, but are not limited to:
 Focusing on a dataset of German newspaper articles on the event "European Refugee Crisis" published between 2014-2018, 
 we demonstrate the crucial role of these linguistic devices in framing.  
 
-## Scripts
+## 2. Code
 
 - Folder ```linguistic_annotation_service```: 
   Pipeline for annotating all linguistic features used in our study. Section 4 of the paper gives a comprehensive description of them. 
@@ -29,5 +29,5 @@ we demonstrate the crucial role of these linguistic devices in framing.
 - Folder ```logistic_regression```: 
   Scripts for the logistic regression analysis presented in Section 5.2 of the paper.
   
-## Acknowledgement
+## 3. Acknowledgement
 This project is funded by the Deutsche Forschungsgemeinschaft (DFG – German Research Foundation) under Germany‘s Excellence Strategy – EXC-2035/1 – 390681379.

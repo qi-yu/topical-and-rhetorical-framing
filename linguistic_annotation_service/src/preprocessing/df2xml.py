@@ -1,4 +1,4 @@
-import os, shutil, argparse
+import os, shutil
 import pandas as pd
 import xml.etree.ElementTree as ET
 from tqdm import tqdm
