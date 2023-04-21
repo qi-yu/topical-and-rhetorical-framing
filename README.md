@@ -36,10 +36,11 @@ We provide our Linguistic Annotation Service (folder ```linguistic_annotation_se
 **LiAnS accepts .csv or .tsv files as input.** To use LiAnS, please run the following commands in your terminal:
 1. Redirect to the directory of LiAnS: ```cd linguistic_annotation_service```
 2. Install all requested packages: ```pip install -r requirements.txt```
-3. Start annotation: ```sh annotate.sh --path <path_of_input_file> --column <text_column> --separator <separator_of_input_file>```, where:
+3. Start annotation: <br> ```sh annotate.sh --path <path_of_input_file> --column <text_column> --separator <separator_of_input_file>``` 
+  <br> where:
    1. ```<path_of_input_file>``` should be replaced by the path of your input .csv/.tsv file 
    2. ```<text_column>``` should be replaced by the name of the column in your .csv/.tsv file where the texts to be annotated are stored
-   3. ```<separator_of_input_file>``` should be replaced by the separator of your input file. It accepts the following options: ```comma```,  ```tab```, ```semicolon```
+   3. ```<separator_of_input_file>``` should be replaced by the separator of your input file. <br> It accepts the following options: ```comma```,  ```tab```, ```semicolon```
 
   
 Once the annotation has run successfully, you can find all feature statistics in the folder ```results```. The annotated files can be found in the folder ```annotation``` 
