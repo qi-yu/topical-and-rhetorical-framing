@@ -1,3 +1,3 @@
-## Content
+# Content
 - ```topical_framing_pmi.ipynb```: Script for inspecting the most representative lexical items of each topical framing feature in each newspaper. See Section 6.1 of the original paper for details.
 - ```logistic_regression.Rmd```: Script for investigating the most distinctive framing features in each newspaper source using logistic regression. See Section 5.2 of the original paper for details. <br> All results of the logistic regression analyses can be viewed in ```logistic_regression.html```. 

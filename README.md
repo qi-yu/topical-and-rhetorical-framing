@@ -9,8 +9,8 @@ In Proceedings of the 6th Joint SIGHUM Workshop on Computational Linguistics for
 
 ### Overview of the paper:
 
-This paper aims to investigate the *linguistic properties of framing in political discourse*:
-whereas most NLP studies on automated framing detection focus heavily on framing effect arising from topic coverage, 
+This paper aims to investigate the *linguistic properties of framing in political discourse*.
+Whereas most NLP studies on automated framing detection focus heavily on framing effect arising from topic coverage, 
 framing effect arising from subtle semantic and pragmatic devices remains understudied. 
 Such devices include, but are not limited to: 
 
@@ -100,11 +100,11 @@ It currently supports the following features:
 
 ### 3.1 Usage
 **LiAnS accepts .csv or .tsv files as input.** 
-For ease of annotation storage, LiAnS converts each raw text in the input file to an XML file, and stores all annotations as XML attributes. 
+For ease of annotation storage, LiAnS converts each raw text in the input file to an XML file and stores all annotations as XML attributes. 
 Once the annotation has run successfully, all feature statistics will be written out as a separate .csv/.tsv file. 
 See [Section 3.2](#32-output) below for details. 
 
-To use LiAnS, please run the following commands in your terminal:
+To use LiAnS, please run the following commands in the terminal:
 1. Install all requested packages: <br> ```pip install -r requirements.txt```
 2. Redirect to the directory of LiAnS: <br> ```cd linguistic_annotation_service```
 3. Start annotation: <br> ```sh annotate.sh --path <path_of_input_file> --column <text_column> --separator <separator_of_input_file>``` 
@@ -125,7 +125,7 @@ where ```x``` stands for the corresponding row number of the text of the input .
 LiAnS uses [Stanza](https://stanfordnlp.github.io/stanza/) for preprocessing. 
 As the model server of Stanza is slow, the runtime can be long for large amount of documents.
 
-## 4. Acknowledgement
+## 4. Acknowledgment
 
 This project is funded by the Deutsche Forschungsgemeinschaft (DFG – German Research Foundation) under Germany‘s Excellence Strategy – EXC-2035/1 – 390681379.
 
