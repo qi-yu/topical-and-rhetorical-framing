@@ -102,7 +102,7 @@ It currently supports the following features:
 **LiAnS accepts .csv or .tsv files as input.** 
 For ease of annotation storage, LiAnS converts each raw text in the input file to an XML file and stores all annotations as XML attributes. 
 Once the annotation has run successfully, all feature statistics will be written out as a separate .csv/.tsv file. 
-See [Section 3.2](#32-output) below for details. 
+See [Section "Ouput"](#32-output) below for details. 
 
 To use LiAnS, please run the following commands in the terminal:
 1. Install all requested packages: <br> ```pip install -r requirements.txt```
