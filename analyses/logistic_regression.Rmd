@@ -1,0 +1,188 @@
+---
+title: "Logistic Regression Analysis of Topical and Rhetorical Framing Features"
+author: "Qi Yu"
+date: "2023-02-20"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r message=FALSE}
+library(tidyverse)
+library(broom)
+library(dplyr)
+library(tibble)
+library(ggplot2)
+library(ggsci)
+library(visreg)
+library(jtools)
+library(lme4)
+library(corrplot)
+library(Hmisc)
+```
+
+# 1. Read in feature statistics
+```{r}
+df <- read.csv("/Users/qiyu/PycharmProjects/topical-and-rhetorical-framing/linguistic_annotation_service/results/feature_statistics.tsv", sep="\t", header=TRUE)
+save_root = "results/"
+```
+
+
+# 2. Preprocessing 
+
+Combine the statistics of all discourse connective types to one feature ```connective```: 
+```{r}
+df$connective <- df$causal + df$consecutive + df$conditional + df$concessive + df$adversative
+```
+
+Remove columns that will not be used for logistic regression:
+```{r}
+df <- select(df, -c(id, text, text_cleaned,
+                    causal, consecutive, conditional, concessive, adversative
+                    )) 
+```
+
+
+Rearrange the column orders, so that features belonging to the same type and dimension (see Section 4 of the original paper) are groupped together: 
+```{r}
+col_order <- c("source", 
+               "arousal", # dimension "arousal"
+               "adv_iter_cont", "scalar_particle",# dimension "presupposition"
+               "common_ground", "resigned_accept", "weak_commit", # dimension "modal particles"
+               "exclamation", "question", # dimension "sentence type"
+               "connective", # dimension "information structure"
+               "economy", "identity", "legal", "morality", "policy", "politics", "public_opinion", "security", "welfare" # topical framing features
+               )
+
+df <- df[, col_order]
+```
+
+# 3. Check correlation of the features
+
+```{r results = 'hide'}
+res <-rcorr(as.matrix(df[, 2:ncol(df)]), type="spearman")
+sort(c(round(as.matrix(res$r), 3)))
+```
+```{r}
+label_col = rep(c("#08519C", "black"), times = c(9, 9))
+corrplot(res$r, type="upper", method="number", tl.col = label_col, tl.srt = 45, number.cex= 0.5, tl.cex = 1, cl.cex = 1, mar = c(0, 0, 0, 0))
+```
+
+As ```economy``` and ```welfare``` show a relatively strong correlation whereas the vocabulary of ```economy``` has a broader coverage, we discard the feature ```welfare```:
+```{r}
+df <- select(df, -c(welfare))
+```
+
+# 4. Logistic regression
+
+To quantify which features are most distinctive in each newspaper source (BILD, FAZ and SZ), 
+for each source we fit a binary logistic regression model using the source as
+response variable (e.g., is_BILD = 0 vs.1) and all features as predictors.
+
+Firstly, we create the binary response variable: 
+```{r}
+df <- df %>% 
+  mutate(is_bild = if_else(source == 0, "yes", "no"), .after = "source") %>% 
+  mutate(is_faz = if_else(source == 1, "yes", "no"), .after = is_bild) %>% 
+  mutate(is_sz = if_else(source == 2, "yes", "no"), .after = is_faz) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(source = factor(source))
+```
+
+Standardize all predictors by removing the mean and scaling to unit variance:
+```{r}
+x <- df[, 5: ncol(df)] %>%
+  mutate_if(is.numeric, scale)
+x <- as.data.frame(x)
+```
+
+Fit logistic regression model for each newspaper source. 
+
+Results of all significant features are written out to the folder /results.
+```{r}
+sources <- c("bild", "faz", "sz")
+
+for (s in grep("is_bild", colnames(df)) : grep("is_sz", colnames(df))) {
+  y <- df[, s]
+  df_logistic <- cbind(y, x)
+
+  model <- glm(y ~ ., data = df_logistic, family = 'binomial')
+  print(summary(model))
+
+  result <- tidy(model) %>%
+    mutate_if(is.numeric, round, digits=5)
+
+  result <- result[order(result$statistic, decreasing=TRUE), ]
+  write.csv(result[result$p.value < 0.05, ], paste(save_root, "logistic_regression_", sources[s-1], ".csv", sep = ""), row.names=FALSE)
+}
+```
+
+# 5. Plot logistic regression results: 
+
+Read in the result files from Section 4, and group the features into two types (```Topical```, ```Rhetorical```) for plotting:
+```{r}
+df_bild <- read.csv("./results/logistic_regression_bild.csv") %>% 
+  mutate(source = "BILD") %>% 
+  mutate(feature_type = if_else(term %in% c("economy", "identity", "legal", "morality", "policy", "politics", "public_opinion", "security", "welfare"), "Topical", "Rhetorical")) %>% 
+  filter(term!="(Intercept)")
+
+df_faz <- read.csv("./results/logistic_regression_faz.csv") %>% 
+   mutate(source = "FAZ") %>% 
+  mutate(feature_type = if_else(term %in% c("economy", "identity", "legal", "morality", "policy", "politics", "public_opinion", "security", "welfare"), "Topical", "Rhetorical")) %>% 
+  filter(term!="(Intercept)")
+
+df_sz <- read.csv("./results/logistic_regression_sz.csv") %>% 
+   mutate(source = "SZ") %>% 
+  mutate(feature_type = if_else(term %in% c("economy", "identity", "legal", "morality", "policy", "politics", "public_opinion", "security", "welfare"), "Topical", "Rhetorical")) %>% 
+  filter(term!="(Intercept)")
+```
+
+For each newspaper, plot the z-value of each feature. Note that only significant features are included here (see Section 4):
+```{r}
+ggplot(df_bild, aes(x = reorder(term, statistic), y = statistic, fill = feature_type)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  ylab("Z-Score") + 
+  ggtitle("BILD") + 
+  scale_fill_jco() +
+  theme_grey() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        text = element_text(size = 21), 
+        legend.position = "none")
+```
+
+```{r}
+ggplot(df_faz, aes(x = reorder(term, statistic), y = statistic, fill = feature_type)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  ylab("Z-Score") + 
+  ggtitle("FAZ") + 
+  scale_fill_jco() +
+  theme_grey() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        text = element_text(size = 21),
+        legend.position = "none")
+```
+
+```{r}
+ggplot(df_sz, aes(x = reorder(term, statistic), y = statistic, fill = feature_type)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  ylab("Z-Score") + 
+  ggtitle("SZ") + 
+  scale_fill_jco() +
+  theme_grey() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), 
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        text = element_text(size = 21)) + 
+  guides(fill=guide_legend(title="Feature Type"))
+```
+
+
+
+

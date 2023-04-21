@@ -2,7 +2,7 @@
 
 ## 1. About
 
-This repository contains the source code of the paper to appear in:
+This repository contains the source code of the following paper:
 
 *Qi Yu. 2023. Towards a More In-Depth Detection of Political Framing. 
 In Proceedings of the 6th Joint SIGHUM Workshop on Computational Linguistics for Cultural Heritage, Social Sciences, Humanities and Literature.*
@@ -21,29 +21,105 @@ Such devices include, but are not limited to:
 Focusing on a dataset of German newspaper articles on the event "European Refugee Crisis" published between 2014-2018, 
 we demonstrate the crucial role of these linguistic devices in framing.  
 
-## 2. Code
+## 2. Content of the Repository
 
 - Folder ```linguistic_annotation_service```: 
   Pipeline for annotating all linguistic features used in our study. Section 4 of the paper gives a comprehensive description of them. 
   See also Section 5.1 for further details on the pipeline creation.
-- Folder ```logistic_regression```: 
-  Scripts for the logistic regression analysis presented in Section 5.2 of the paper.
+- Folder ```analyses```: 
+  Scripts for the analyses of German newspaper articles on "European Refugee Crisis" as presented in Section 5-6 of the original paper.
 
-## 3. Use Our Linguistic Annotation Service (LiAnS)
+## 3. Use Our Linguistic Annotation Service
 
-We provide our Linguistic Annotation Service (folder ```linguistic_annotation_service```) as an open-source tool. 
+We provide our Linguistic Annotation Service (*LiAnS*; under the folder ```linguistic_annotation_service```) as an open-source tool. 
+LiAnS conducts automated annotation of in-depth semantic and pragmatic features in German that are relevant to framing. 
+It currently supports the following features: 
 
-**LiAnS accepts .csv or .tsv files as input.** To use LiAnS, please run the following commands in your terminal:
-1. Redirect to the directory of LiAnS: ```cd linguistic_annotation_service```
-2. Install all requested packages: ```pip install -r requirements.txt```
+<table>
+    <thead>
+        <tr>
+            <th>Dimension</th>
+            <th>Feature</th>
+            <th>Example</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan=1>emotion intensity</td>
+            <td rowspan=1>arousal</td>
+            <td><i>schlecht</i> 'bad' (lower emotion intensity) vs. <i>dreist</i> 'brazen-faced' (higher emotion intensity)</td>
+        </tr>
+        <tr>
+            <td rowspan=2>presupposition</td>
+            <td>scalar particles </td>
+            <td><i>sogar</i> 'even', <i>wenigstens</i> 'at least' </td>
+        </tr>
+        <tr>
+            <td>adverbs for iteration/continuation </td>
+            <td><i>wieder</i> 'again', <i>andauernd</i> 'continuously'</td>
+        </tr>
+        <tr>
+            <td rowspan=3>modal particle</td>
+            <td>modal particles for common ground</td>
+            <td><i>ja</i> 'as we all know'</td>
+        </tr>
+        <tr>
+            <td>modal particles for resigned acceptance</td>
+            <td><i>eben</i> / <i>halt</i>  'that’s just the way it is'</td>
+        </tr>
+        <tr>
+            <td>modal particles for weakened commitment</td>
+            <td><i>wohl</i> 'I assume'</td>
+        </tr>
+        <tr>
+            <td rowspan=2>sentence type</td>
+            <td>question</td>
+        </tr>
+        <tr>
+            <td>exclamation</td>
+        </tr>
+        <tr>
+            <td rowspan=4>information structure</td>
+            <td>causal connectives</td>
+            <td><i>weil</i> 'because', <i>deshalb</i> 'therefore'</td>
+        </tr>
+        <tr>
+            <td>adversative connectives</td>
+            <td><i>jedoch</i> 'but', <i>Einerseits...Andereseits...</i> 'On the one hand...On the other hand...'</td>
+        </tr>
+        <tr>
+            <td>concessive connectives</td>
+            <td><i>obwohl</i> 'although', <i>trotzdem</i> 'despite'</td>
+        </tr>
+        <tr>
+            <td>conditional connectives</td>
+            <td><i>wenn</i> 'if', <i>falls</i> 'in case'</td>
+        </tr>
+    </tbody>
+</table>
+
+### 3.1 Usage
+**LiAnS accepts .csv or .tsv files as input.** 
+For ease of annotation storage, LiAnS converts each raw text in the input file to an XML file, and stores all annotations as XML attributes. 
+Once the annotation has run successfully, all feature statistics will be written out as a separate .csv/.tsv file. 
+See [Section 3.2](#32-output) below for details. 
+
+To use LiAnS, please run the following commands in your terminal:
+1. Install all requested packages: <br> ```pip install -r requirements.txt```
+2. Redirect to the directory of LiAnS: <br> ```cd linguistic_annotation_service```
 3. Start annotation: <br> ```sh annotate.sh --path <path_of_input_file> --column <text_column> --separator <separator_of_input_file>``` 
   <br> where:
    1. ```<path_of_input_file>``` should be replaced by the path of your input .csv/.tsv file 
    2. ```<text_column>``` should be replaced by the name of the column in your .csv/.tsv file where the texts to be annotated are stored
    3. ```<separator_of_input_file>``` should be replaced by the separator of your input file. <br> It accepts the following options: ```comma```,  ```tab```, ```semicolon```
 
-  
-Once the annotation has run successfully, you can find all feature statistics in the folder ```results```. The annotated files can be found in the folder ```annotation``` 
+
+### 3.2 Output
+After successfully running LiAnS, you can find all feature statistics in the folder ```results```. See Section 4 of the original paper for details of the feature calculation.
+
+The annotated texts can be found in the folder ```annotation```. 
+All files have the name format ```doc_x_annotated.xml```, 
+where ```x``` stands for the corresponding row number of the text of the input .csv/.tsv file.
 
 ### NOTE:
 LiAnS uses [Stanza](https://stanfordnlp.github.io/stanza/) for preprocessing. 
