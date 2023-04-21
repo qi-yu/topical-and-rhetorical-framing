@@ -55,29 +55,29 @@ for r, d, f in os.walk(inputRoot):
 
                     # ----- 3. eben -----
                     if currentLemma == "eben":
-                        lexeme.set("resigned_acceptance", "eben")
+                        lexeme.set("resigned_accept", "eben")
 
                         # Exclude "eben" in "gerade eben":
                         if idx > 0 and lexemeList[idx-1].get("lemma") == "gerade":
-                            lexeme.attrib.pop("resigned_acceptance", None)
+                            lexeme.attrib.pop("resigned_accept", None)
 
                         # Exclude "eben" in "Ja eben, ..."
                         if idx > 0 and lexemeList[idx-1].text == "Ja":
-                            lexeme.attrib.pop("resigned_acceptance", None)
+                            lexeme.attrib.pop("resigned_accept", None)
 
                     # ----- 4. halt -----
                     if currentLemma == "halt" and re.match("(ADV|ADJD)", currentPos):
-                        lexeme.set("resigned_acceptance", "halt")
+                        lexeme.set("resigned_accept", "halt")
 
                     # ----- 5. wohl -----
                     if currentLemma == "wohl" and currentPos == "ADV":
                         wohlGov = lexeme.get("governor")
                         wohlIndex = idx
-                        lexeme.set("hedging", "wohl")
+                        lexeme.set("weak_commit", "wohl")
 
                         # Exclude "wohl" in "sehr wohl":
                         if idx > 0 and lexemeList[idx-1].get("lemma") == "sehr":
-                            lexeme.attrib.pop("hedging", None)
+                            lexeme.attrib.pop("weak_commit", None)
 
                     # Exclude "wohl" in "sich wohl fühlen":
                     if currentLemma == "fühlen":
@@ -88,6 +88,6 @@ for r, d, f in os.walk(inputRoot):
 
                     if wohlGov is not None and fuehlenIndex is not None and reflexGov is not None:
                         if wohlGov == fuehlenIndex and reflexGov == fuehlenIndex:
-                            lexemeList[wohlIndex].attrib.pop("hedging", None)
+                            lexemeList[wohlIndex].attrib.pop("weak_commit", None)
 
             tree.write(os.path.join(r, filename), encoding="utf-8")

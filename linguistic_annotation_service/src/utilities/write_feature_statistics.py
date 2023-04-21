@@ -1,6 +1,7 @@
-import os, datetime, shutil
+import os, shutil
 import pandas as pd
 from src.utilities.annotation_utils import parse_xml_tree, get_sentence_as_lexeme_list, get_feature_list, get_flag_arguments
+from tqdm import tqdm
 
 
 print("Writing out feature statistics...")
@@ -20,11 +21,11 @@ all_feature_stats = {feature: [] for feature in feature_names}
 all_feature_match = {feature: [] for feature in feature_names}
 all_total_token_counts = []
 
-exclude_quotation = ["common_ground", "resigned_acceptance", "hedging", "question", "exclamation"]
-score_based = ["arousal", "concreteness", "imageability", "valence"]
+exclude_quotation = ["common_ground", "resigned_accept", "weak_commit", "question", "exclamation"]
+score_based = ["arousal"]
 
 for r, d, f in os.walk(inputRoot):
-    for filename in sorted(f):
+    for file_index, filename in tqdm(enumerate(sorted(f)), total=len(f), bar_format='{l_bar}{bar:10}{r_bar}{bar:-10b}'):
         tree, root = parse_xml_tree(os.path.join(r, filename))
 
         total_token_count = 0
@@ -66,8 +67,8 @@ for r, d, f in os.walk(inputRoot):
 df_stats = pd.concat([df_original, pd.DataFrame(all_feature_stats)], axis=1)
 
 df_match = pd.DataFrame(all_feature_match)
-df_match.drop(["question", "exclamation", "arousal", "valence"], axis=1, inplace=True)
+df_match.drop(["question", "exclamation", "arousal"], axis=1, inplace=True)
 df_match = pd.concat([df_original, df_match], axis=1)
 
-df_stats.to_csv(os.path.join(output_root, "feature_statistics_" + datetime.datetime.today().strftime('%Y-%m-%d') + ".tsv"), sep="\t", encoding="utf-8", index=False)
-df_match.to_pickle(os.path.join(output_root, "matched_items_" + datetime.datetime.today().strftime('%Y-%m-%d') + ".pkl"))
+df_stats.to_csv(os.path.join(output_root, "feature_statistics.tsv"), sep="\t", encoding="utf-8", index=False)
+df_match.to_pickle(os.path.join(output_root, "matched_items.pkl"))

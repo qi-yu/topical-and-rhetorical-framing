@@ -22,7 +22,7 @@ for r, d, f in os.walk(inputRoot):
 
                     # ----- 1. Items that do not need disambiguation -----
                     if lexeme.get("lemma") in iter_cont_list:
-                        lexeme.set("iter_cont_item", lexeme.get("lemma"))
+                        lexeme.set("adv_iter_cont", lexeme.get("lemma"))
 
                     if lexeme.get("lemma") in scalar_particle_list:
                         lexeme.set("scalar_particle", lexeme.get("lemma"))
@@ -30,13 +30,13 @@ for r, d, f in os.walk(inputRoot):
                     # ----- 2. N-grams -----
                     # 2.1 immer mehr
                     if idx < len(lexemeList)-1 and lexeme.get("lemma") == "immer" and lexemeList[idx+1].get("lemma") == "mehr":
-                        lexeme.set("iter_cont_item", "immer_mehr")
-                        lexemeList[idx+1].set("iter_cont_item_2", "mehr")
+                        lexeme.set("adv_iter_cont", "immer_mehr")
+                        lexemeList[idx+1].set("adv_iter_cont_2", "mehr")
 
                     # 2.2 immer noch
                     if idx < len(lexemeList)-1 and lexeme.get("lemma") == "immer" and lexemeList[idx+1].get("lemma") == "noch":
-                        lexeme.set("iter_cont_item", "immer_noch")
-                        lexemeList[idx+1].set("iter_cont_item_2", "noch")
+                        lexeme.set("adv_iter_cont", "immer_noch")
+                        lexemeList[idx+1].set("adv_iter_cont_2", "noch")
 
                     # 2.3 nicht einmal
                     if idx < len(lexemeList)-1 and lexeme.get("lemma") == "nicht" and lexemeList[idx+1].get("lemma") == "einmal":

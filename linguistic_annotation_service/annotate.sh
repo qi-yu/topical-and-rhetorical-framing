@@ -5,7 +5,7 @@ export PYTHONPATH="$PWD"
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
 
-## ----- 1. Preprocessing -----
+# ----- 1. Preprocessing -----
 python src/preprocessing/df2xml.py "$@"
 python src/preprocessing/preprocessing_stanza.py
 rm -r ./interim

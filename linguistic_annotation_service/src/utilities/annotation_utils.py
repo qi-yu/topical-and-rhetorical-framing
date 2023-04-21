@@ -11,8 +11,6 @@ def parse_xml_tree(filepath):
         mytree: The parsed XML-tree.
         myroot: The root of the parsed XML-tree.
     """
-
-    # print("Process file:", filepath, "...")
     mytree = ET.parse(filepath)
     myroot = mytree.getroot()
     return mytree, myroot
@@ -69,10 +67,10 @@ def get_feature_list():
     """
     feature_list = ["question", "exclamation",
                     "causal", "consecutive", "adversative", "concessive", "conditional",
-                    "common_ground", "resigned_acceptance", "hedging",
-                    "iter_cont_item", "scalar_particle",
+                    "common_ground", "resigned_accept", "weak_commit",
+                    "adv_iter_cont", "scalar_particle",
                     "economy", "identity", "legal", "morality", "policy", "politics", "public_opinion", "security", "welfare",
-                    "arousal", "valence"
+                    "arousal"
                     ]
 
     return feature_list
