@@ -1,3 +1,8 @@
+'''
+Originally implemented by Marina Janka-Ramm based on the framework designed by Qi Yu;
+Minor edit was conducted by Qi Yu.
+'''
+
 import os
 from src.utilities.annotation_utils import parse_xml_tree, get_sentence_as_lexeme_list
 from tqdm import tqdm
