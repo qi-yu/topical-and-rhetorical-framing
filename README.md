@@ -125,7 +125,22 @@ where ```x``` stands for the corresponding row number of the text of the input .
 LiAnS uses [Stanza](https://stanfordnlp.github.io/stanza/) for preprocessing. 
 As the model server of Stanza is slow, the runtime can be long for large amount of documents.
 
-## 4. Acknowledgment
+## 4 Cite the paper
+```
+@inproceedings{yu-2023-towards,
+    title = "Towards a More In-Depth Detection of Political Framing",
+    author = "Yu, Qi",
+    booktitle = "Proceedings of the 7th Joint SIGHUM Workshop on Computational Linguistics for Cultural Heritage, Social Sciences, Humanities and Literature",
+    month = may,
+    year = "2023",
+    address = "Dubrovnik, Croatia",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.latechclfl-1.18",
+    pages = "162--174"
+}
+```
+
+## 5. Acknowledgment
 
 This project is funded by the Deutsche Forschungsgemeinschaft (DFG – German Research Foundation) under Germany‘s Excellence Strategy – EXC-2035/1 – 390681379.
 
