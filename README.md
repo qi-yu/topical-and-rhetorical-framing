@@ -127,8 +127,8 @@ The annotated texts can be found in the folder ```annotation```.
 All files have the name format ```doc_x_annotated.xml```, 
 where ```x``` stands for the corresponding row number of the text of the input .csv/.tsv file.
 
-### NOTE:
-LiAnS uses [Stanza](https://stanfordnlp.github.io/stanza/) for preprocessing. 
+> [!WARNING]
+> LiAnS uses [Stanza](https://stanfordnlp.github.io/stanza/) for preprocessing. 
 As the model server of Stanza is slow, the runtime can be long for large amount of documents.
 
 ## 4. Cite the paper
